@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Jenkins_devops_exams_test
 Examen de Datascientest sur Jenkins et Kubernetes (k3s) pour une pipeline CI/CD. Déploiement automatisé d'une application.
 =======
@@ -11,4 +10,3 @@ Learn to build your own microservice using Python and FastAPI
  - Run `docker-compose up -d`
  - Head over to http://localhost:8080/api/v1/movies/docs for movie service docs 
    and http://localhost:8080/api/v1/casts/docs for cast service docs
->>>>>>> 8a3e60c (First commit - projet examen Jenkins - avant modifications)
