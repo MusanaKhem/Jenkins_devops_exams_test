@@ -1,7 +1,7 @@
 pipeline {
 environment { // Declaration of environment variables
 DOCKER_ID = "hmatondo" // replace this with your docker-id
-DOCKER_IMAGE = "Jenkins_devops_exam_test"
+DOCKER_IMAGE = "jenkins_devops_exam_api"
 DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
 HELM_PATH = "/usr/local/bin/helm" //In my case it is important to specify helm path ; if none Jenkins will not find tool
 }
