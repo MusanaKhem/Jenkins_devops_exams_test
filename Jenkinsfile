@@ -129,7 +129,7 @@ stage('Deploiement en staging'){
 }
 post {
     success {
-        echo "This will run if the job failed"
+        echo "This will run if the job succeeded"
         mail to: "hermann.acm@gmail.com",
              subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} is success",
              body: "Hi, this is Hermann, pipeline build was realized with success. Thanks you."
