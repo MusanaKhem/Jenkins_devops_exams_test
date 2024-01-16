@@ -41,6 +41,8 @@
 │   ├── nginx-service.yaml
 │   ├── postgres-data-cast-persistentvolumeclaim.yaml
 │   └── postgres-data-movie-persistentvolumeclaim.yaml
+├── lien_dockehub.txt
+├── lien_repo.txt
 ├── movie-service
 │   ├── app
 │   │   ├── api
@@ -55,4 +57,4 @@
 ├── nginx_config.conf
 └── README.md
 
-12 directories, 44 files
+12 directories, 46 files
