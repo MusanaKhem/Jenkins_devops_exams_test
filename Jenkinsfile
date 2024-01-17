@@ -12,7 +12,7 @@ stages {
                 script {
                 sh '''
                  docker rm -f jenkins_devop_exam_test
-                 docker compose up -d -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG$DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                 docker compose up -d -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
                  // docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
                 sleep 6
                 '''
