@@ -10,6 +10,15 @@ HELM_PATH = "/usr/local/bin/helm" // In my case it is important to specify helm 
 }
 agent any // Jenkins will be able to select all available agents
 stages {
+        stage('Debug Docker Build'){
+            steps {
+                script {
+                    echo "DOCKER_ID: $DOCKER_ID"
+                    echo "DOCKER_TAG: $DOCKER_TAG"
+                    echo "Building and pushing images..."
+                }
+            }
+        }
         stage(' Docker Build'){ // docker build image stage
             steps {
                 script {
