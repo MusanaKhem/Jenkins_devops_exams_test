@@ -15,6 +15,10 @@ stages {
                 script {
                     echo "DOCKER_ID: $DOCKER_ID"
                     echo "DOCKER_TAG: $DOCKER_TAG"
+                    echo "DOCKER_CAST_IMAGE: $DOCKER_CAST_IMAGE"
+                    echo "DOCKER_MOVIES_IMAGE: $DOCKER_MOVIES_IMAGE"
+                    echo "DOCKER_CAST_DB_IMAGE: $DOCKER_CAST_DB_IMAGE"
+                    echo "DOCKER_MOVIE_DB_IMAGE: $DOCKER_MOVIE_DB_IMAGE"
                     echo "Building and pushing images..."
                 }
             }
@@ -31,10 +35,10 @@ stages {
                   docker rmi postgres:12.1-alpine
                   docker rmi jenkins_devops_exam_test-cast_service
                   dcoker rmi jenkins_devops_exam_test-movie_service
-                  docker rm -f jenkins_devop_exam_test-cast_db-1 || true
-                  docker rm -f jenkins_devop_exam_test-movie_db-1 || true
-                  docker rm -f jenkins_devop_exam_test-cast_service-1 || true
-                  docker rm -f jenkins_devop_exam_test-movie_service-1 || true
+                  docker rm -f jenkins_devop_exam_test-cast_db-1
+                  docker rm -f jenkins_devop_exam_test-movie_db-1
+                  docker rm -f jenkins_devop_exam_test-cast_service-1
+                  docker rm -f jenkins_devop_exam_test-movie_service-1
                   docker compose up -d
                   sleep 6
                 '''
@@ -70,7 +74,9 @@ stages {
             {
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve docker password from secret text called docker_hub_pass saved on jenkins
             }
+
             steps {
+
                 script {
                 sh '''
                 docker login -u $DOCKER_ID -p $DOCKER_PASS
