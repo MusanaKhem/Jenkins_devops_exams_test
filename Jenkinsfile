@@ -20,10 +20,10 @@ stages {
                   docker rm -f jenkins_devop_exam_test-movie_service-1 || true
                   docker compose up -d
                   sleep 6
-                  docker build -t $DOCKER_ID/$DOCKER_CAST_DB_IMAGE:$DOCKER_TAG .
-                  docker build -t $DOCKER_ID/$DOCKER_MOVIES_DB_IMAGE:$DOCKER_TAG .
-                  docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
-                  docker build -t $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG .
+                  //docker build -t $DOCKER_ID/$DOCKER_CAST_DB_IMAGE:$DOCKER_TAG .
+                  //docker build -t $DOCKER_ID/$DOCKER_MOVIES_DB_IMAGE:$DOCKER_TAG .
+                  //docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
+                  //docker build -t $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG .
                 '''
                 }
             }
