@@ -70,7 +70,7 @@ stages {
                 '''
                 }
             }
-S
+
         }
 
 stage('Deploiement en dev'){
@@ -88,12 +88,35 @@ stage('Deploiement en dev'){
                 cp fastapi/values.yaml values.yml
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                $HELM_PATH upgrade --install app fastapi --values=values.yml --namespace dev
+                $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace dev
                 '''
                 }
             }
 
         }
+
+stage('Deploiement en QA'){
+        environment
+        {
+        KUBECONFIG = credentials("config_Jenkins_exam_test") // we retrieve kubeconfig from secret file called config saved on jenkins
+        }
+            steps {
+                script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp fastapi/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace qa
+                '''
+                }
+            }
+
+        }
+
 stage('Deploiement en staging'){
         environment
         {
@@ -109,7 +132,7 @@ stage('Deploiement en staging'){
                 cp fastapi/values.yaml values.yml
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                $HELM_PATH upgrade --install app fastapi --values=values.yml --namespace staging
+                $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace staging
                 '''	 
                 }
             }
@@ -136,7 +159,7 @@ stage('Deploiement en staging'){
                 cp fastapi/values.yaml values.yml
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                $HELM_PATH upgrade --install app fastapi --values=values.yml --namespace prod
+                $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace prod
                 '''
                 }
             }
