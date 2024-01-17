@@ -32,10 +32,10 @@ stages {
                 steps {
                     script {
                     sh '''             
-                    docker run -d -p 80:80 --name jenkins_devop_exam_test-movie_service-1 $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
-                    docker run -d -p 81:80 --name jenkins_devop_exam_test-cast_service-1 $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
-                    docker run -d -p 82:80 --name jenkins_devop_exam_test-cast_db-1 $DOCKER_ID/$DOCKER_CAST_DB_IMAGE:$DOCKER_TAG
-                    docker run -d -p 83:80 --name jenkins_devop_exam_test-movie_db-1 $DOCKER_ID/$DOCKER_MOVIE_DB_IMAGE:$DOCKER_TAG
+                    docker run -d -p 81:80 --name jenkins_devop_exam_test-movie_service-1 $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
+                    docker run -d -p 82:80 --name jenkins_devop_exam_test-cast_service-1 $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
+                    docker run -d -p 83:80 --name jenkins_devop_exam_test-cast_db-1 $DOCKER_ID/$DOCKER_CAST_DB_IMAGE:$DOCKER_TAG
+                    docker run -d -p 84:80 --name jenkins_devop_exam_test-movie_db-1 $DOCKER_ID/$DOCKER_MOVIE_DB_IMAGE:$DOCKER_TAG
                     sleep 10
                     '''
                     }
@@ -63,11 +63,14 @@ stages {
                 script {
                 sh '''
                 docker login -u $DOCKER_ID -p $DOCKER_PASS
-                docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_CAST_DB_IMAGE:$DOCKER_TAG .
+                docker push $DOCKER_ID/$DOCKER_MOVIES_DB_IMAGE:$DOCKER_TAG .
+                docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
+                docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG .
                 '''
                 }
             }
-
+S
         }
 
 stage('Deploiement en dev'){
