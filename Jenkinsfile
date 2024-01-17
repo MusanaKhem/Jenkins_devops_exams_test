@@ -23,6 +23,7 @@ stages {
             steps {
                 script {
                 sh '''
+                  docker stop jenkins_devops_exam_test-nginx-1
                   docker stop jenkins_devop_exam_test-cast_db-1
                   docker stop jenkins_devop_exam_test-movie_db-1
                   docker stop jenkins_devop_exam_test-cast_service-1
