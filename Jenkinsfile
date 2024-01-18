@@ -81,7 +81,7 @@ stages {
                     }
                     post {
                         success {
-                              echo 'STAGE SUCCESS : Test d'acceptation réussi'
+                              echo "STAGE SUCCESS : Test d'acceptation réussi"
                         }
                     }
             }
