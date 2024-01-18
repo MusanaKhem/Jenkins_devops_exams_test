@@ -132,7 +132,7 @@ stage('Deploiement en dev'){
                 }
                 post {
                     success {
-                          echo 'STAGE SUCCESS : Deploiement sur l'environnement de développement effectué'
+                          echo "STAGE SUCCESS : Deploiement sur l'environnement de développement effectué"
                     }
                 }
             }
@@ -159,7 +159,7 @@ stage('Deploiement en QA'){
                 }
                 post {
                     success {
-                          echo 'STAGE SUCCESS : Deploiement sur l'environnement de test effectué'
+                          echo "STAGE SUCCESS : Deploiement sur l'environnement de test effectué"
                     }
                 }
             }
@@ -186,7 +186,7 @@ stage('Deploiement en staging'){
                 }
                 post {
                     success {
-                          echo 'STAGE SUCCESS : Deploiement sur l'environnement de pré-poduction réussi'
+                          echo "STAGE SUCCESS : Deploiement sur l'environnement de pré-poduction réussi"
                     }
                 }
             }
@@ -205,7 +205,7 @@ stage('Deploiement en staging'){
                     }
                     post {
                         success {
-                              echo 'USER APPROBATION SUCCESS : ${Username} give his/her authorization to deploy on prod environment'
+                              echo "USER APPROBATION SUCCESS : ${Username} give his/her authorization to deploy on prod environment"
                         }
                     }
 
@@ -223,8 +223,8 @@ stage('Deploiement en staging'){
                 }
                 post {
                     success {
-                          echo 'STAGE SUCCESS : Deploiement sur l'environnement de production réussi'
-                          echo 'Pipeline realized and triggered by $[params.user}. Thank you for your courses, tips and advices! So Grateful !!'
+                          echo "STAGE SUCCESS : Deploiement sur l'environnement de production réussi"
+                          echo "Pipeline realized and triggered by $[params.user}. Thank you for your courses, tips and advices! So Grateful !!"
                     }
                 }
             }
