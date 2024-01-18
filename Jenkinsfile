@@ -1,7 +1,7 @@
 pipeline {
 environment { // Declaration of environment variables
 DOCKER_ID = "hmatondo"  //DockerHub useraccount
-DOCKER_CAST_IMAGE = "jenkins_devops_exams_test-cast_service-1"
+DOCKER_CAST_IMAGE = "jenkins_devops_exam_test-cast_service-1"
 DOCKER_MOVIES_IMAGE = "jenkins_devops_exam_test-movie_service-1"
 DOCKER_CAST_DB_IMAGE = "postgres:12.1-alpine"
 DOCKER_MOVIE_DB_IMAGE = "postgres:12.1-alpine"
@@ -28,17 +28,17 @@ stages {
                 script {
                 sh '''
                   docker stop jenkins_devops_exam_test-nginx-1
-                  docker stop jenkins_devop_exam_test-cast_db-1
-                  docker stop jenkins_devop_exam_test-movie_db-1
-                  docker stop jenkins_devop_exam_test-cast_service-1
-                  docker stop jenkins_devop_exam_test-movie_service-1
+                  docker stop jenkins_devops_exam_test-cast_db-1
+                  docker stop jenkins_devops_exam_test-movie_db-1
+                  docker stop jenkins_devops_exam_test-cast_service-1
+                  docker stop jenkins_devops_exam_test-movie_service-1
                   docker rmi postgres:12.1-alpine
                   docker rmi jenkins_devops_exam_test-cast_service
                   dcoker rmi jenkins_devops_exam_test-movie_service
-                  docker rm -f jenkins_devop_exam_test-cast_db-1
-                  docker rm -f jenkins_devop_exam_test-movie_db-1
-                  docker rm -f jenkins_devop_exam_test-cast_service-1
-                  docker rm -f jenkins_devop_exam_test-movie_service-1
+                  docker rm -f jenkins_devops_exam_test-cast_db-1
+                  docker rm -f jenkins_devops_exam_test-movie_db-1
+                  docker rm -f jenkins_devops_exam_test-cast_service-1
+                  docker rm -f jenkins_devops_exam_test-movie_service-1
                   docker compose up -d
                   sleep 6
                 '''
@@ -49,9 +49,9 @@ stages {
                 steps {
                     script {
                     sh '''             
-                    docker run -d -p 81:80 --name jenkins_devop_exam_test-movie_service-1 $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
-                    docker run -d -p 82:80 --name jenkins_devop_exam_test-cast_service-1 $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
-                    docker run -d -p 83:80 --name jenkins_devop_exam_test-cast_db-1 $DOCKER_ID/$DOCKER_CAST_DB_IMAGE:$DOCKER_TAG
+                    docker run -d -p 81:80 --name jenkins_devops_exam_test-movie_service-1 $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
+                    docker run -d -p 82:80 --name jenkins_devops_exam_test-cast_service-1 $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
+                    docker run -d -p 83:80 --name jenkins_devops_exam_test-cast_db-1 $DOCKER_ID/$DOCKER_CAST_DB_IMAGE:$DOCKER_TAG
                     docker run -d -p 84:80 --name jenkins_devop_exam_test-movie_db-1 $DOCKER_ID/$DOCKER_MOVIE_DB_IMAGE:$DOCKER_TAG
                     sleep 10
                     '''
