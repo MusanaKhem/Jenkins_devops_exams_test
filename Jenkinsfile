@@ -23,29 +23,21 @@ stages {
                 }
             }
         }
-        stage(' Docker Build'){ // docker build image stage
+
+        stage(' Docker Build and run'){ // docker build image stage
             steps {
                 script {
                 sh '''
+                  docker rm -f jenkins_devops_exam_test-cast_db-1
+                  docker rm -f jenkins_devops_exam_test-movie_db-1
+                  docker rm -f jenkins_devops_exam_test-movie_service-1
+                  docker rm -f jenkins_devops_exam_test-cast_service-1
                   docker rm -f jenkins_devops_exam_test-nginx-1
                   docker compose up -d
                   sleep 6
                 '''
                 }
             }
-        }
-        stage('Docker run'){ // run container from our builded image
-                steps {
-                    script {
-                    sh '''             
-                    docker run -d -p 81:80 --name jenkins_devops_exam_test-movie_service-1 $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
-                    docker run -d -p 82:80 --name jenkins_devops_exam_test-cast_service-1 $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
-                    docker run -d -p 83:80 --name jenkins_devops_exam_test-cast_db-1 $DOCKER_ID/$DOCKER_CAST_DB_IMAGE:$DOCKER_TAG
-                    docker run -d -p 84:80 --name jenkins_devop_exam_test-movie_db-1 $DOCKER_ID/$DOCKER_MOVIE_DB_IMAGE:$DOCKER_TAG
-                    sleep 10
-                    '''
-                    }
-                }
         }
 
         stage('Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
@@ -58,6 +50,7 @@ stages {
             }
 
         }
+
         stage('Docker Push'){ //we pass the built image to our docker hub account
             environment
             {
@@ -69,8 +62,6 @@ stages {
                 script {
                 sh '''
                 docker login -u $DOCKER_ID -p $DOCKER_PASS
-                docker push $DOCKER_ID/$DOCKER_CAST_DB_IMAGE:$DOCKER_TAG .
-                docker push $DOCKER_ID/$DOCKER_MOVIES_DB_IMAGE:$DOCKER_TAG .
                 docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
                 docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG .
                 '''
