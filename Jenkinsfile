@@ -224,7 +224,7 @@ stage('Deploiement en staging'){
                 post {
                     success {
                           echo "STAGE SUCCESS : Deploiement sur l'environnement de production réussi"
-                          echo "Pipeline realized and triggered by $[params.user}. Thank you for your courses, tips and advices! So Grateful !!"
+                          echo "Pipeline realized and triggered by ${params.user}. Thank you for your courses, tips and advices! So Grateful !!"
                     }
                 }
             }
