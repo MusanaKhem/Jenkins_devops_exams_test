@@ -9,7 +9,7 @@ DOCKER_TAG = "v.${BUILD_ID}.0" // Tag our image with the current build in order 
 HELM_PATH = "/usr/local/bin/helm" // In my case it is important to specify helm path ; if none Jenkins will not find tool
 }
 agent any // Jenkins will be able to select all available agents
-parametees {
+parameters {
     string(name: 'user', defaultValue: 'hmatondo', description: 'Pipeline realized using few tools such as Git, GitHub, Jenkins, Docker, Kubernetes, k3s.')
 }
 stages {
