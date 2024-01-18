@@ -9,6 +9,9 @@ DOCKER_TAG = "v.${BUILD_ID}.0" // Tag our image with the current build in order 
 HELM_PATH = "/usr/local/bin/helm" // In my case it is important to specify helm path ; if none Jenkins will not find tool
 }
 agent any // Jenkins will be able to select all available agents
+parametees {
+    string(name: 'user', defaultValue: 'hmatondo', description: 'Pipeline realized using few tools such as Git, GitHub, Jenkins, Docker, Kubernetes, k3s.')
+}
 stages {
         stage('Debug Docker Build'){
             steps {
@@ -21,10 +24,15 @@ stages {
                     echo "DOCKER_MOVIE_DB_IMAGE: $DOCKER_MOVIE_DB_IMAGE"
                     echo "Building and pushing images..."
                 }
+                post {
+                    always {
+                          echo 'STAGE SUCCESS : Debu Docker Build'
+                    }
+                }
             }
         }
 
-        stage('Docker Build and run'){ // docker build image stage
+        stage('Docker Compose -> Build and Run'){ // docker build image stage
             steps {
                 script {
                 sh '''
@@ -36,6 +44,11 @@ stages {
                   docker compose up -d
                   sleep 6
                 '''
+                }
+                post {
+                    always {
+                          echo 'STAGE SUCCESS : Docker Compose'
+                    }
                 }
             }
         }
@@ -51,6 +64,11 @@ stages {
                   sleep 4
                 '''
                 }
+                post {
+                    success {
+                          echo 'STAGE SUCCESS : Docker Tag'
+                    }
+                }
             }
         }
 
@@ -60,6 +78,11 @@ stages {
                     sh '''
                     curl localhost
                     '''
+                    }
+                    post {
+                        success {
+                              echo 'STAGE SUCCESS : Test d'acceptation réussi'
+                        }
                     }
             }
 
@@ -75,10 +98,15 @@ stages {
 
                 script {
                 sh '''
-                docker login -u $DOCKER_ID -p $DOCKER_PASS
-                docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
-                docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
+                  docker login -u $DOCKER_ID -p $DOCKER_PASS
+                  docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
+                  docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
                 '''
+                }
+                post {
+                    success {
+                          echo 'STAGE SUCCESS : Docker Push - Images des applications disponibles sur DockerHub.'
+                    }
                 }
             }
 
@@ -102,6 +130,11 @@ stage('Deploiement en dev'){
                 $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace dev
                 '''
                 }
+                post {
+                    success {
+                          echo 'STAGE SUCCESS : Deploiement sur l'environnement de développement effectué'
+                    }
+                }
             }
 
         }
@@ -123,6 +156,11 @@ stage('Deploiement en QA'){
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                 $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace qa
                 '''
+                }
+                post {
+                    success {
+                          echo 'STAGE SUCCESS : Deploiement sur l'environnement de test effectué'
+                    }
                 }
             }
 
@@ -146,6 +184,11 @@ stage('Deploiement en staging'){
                 $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace staging
                 '''	 
                 }
+                post {
+                    success {
+                          echo 'STAGE SUCCESS : Deploiement sur l'environnement de pré-poduction réussi'
+                    }
+                }
             }
 
         }
@@ -160,6 +203,11 @@ stage('Deploiement en staging'){
                     timeout(time: 15, unit: "MINUTES") {
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
+                    post {
+                        success {
+                              echo 'USER APPROBATION SUCCESS : ${Username} give his/her authorization to deploy on prod environment'
+                        }
+                    }
 
                 script {
                 sh '''
@@ -172,6 +220,12 @@ stage('Deploiement en staging'){
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                 $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace prod
                 '''
+                }
+                post {
+                    success {
+                          echo 'STAGE SUCCESS : Deploiement sur l'environnement de production réussi'
+                          echo 'Pipeline realized and triggered by $[params.user}. Thank you for your courses, tips and advices! So Grateful !!'
+                    }
                 }
             }
 
