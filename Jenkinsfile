@@ -1,6 +1,7 @@
 pipeline {
 environment { // Declaration of environment variables
 DOCKER_ID = "hmatondo"  //DockerHub useraccount
+DOCKER_REPOSITORY= "jenkins_devops_exam_test"
 DOCKER_CAST_IMAGE = "jenkins_devops_exam_test-cast_service"
 DOCKER_MOVIES_IMAGE = "jenkins_devops_exam_test-movie_service"
 DOCKER_CAST_DB_IMAGE = "postgres:12.1-alpine"
@@ -16,6 +17,7 @@ stages {
         stage('Debug Docker Build'){
             steps {
                 script {
+                    echo "START PIPELINE JENKINS DEVOPS EXAM TEST"
                     echo "DOCKER_ID: $DOCKER_ID"
                     echo "DOCKER_TAG: $DOCKER_TAG"
                     echo "DOCKER_CAST_IMAGE: $DOCKER_CAST_IMAGE"
@@ -23,11 +25,7 @@ stages {
                     echo "DOCKER_CAST_DB_IMAGE: $DOCKER_CAST_DB_IMAGE"
                     echo "DOCKER_MOVIE_DB_IMAGE: $DOCKER_MOVIE_DB_IMAGE"
                     echo "Building and pushing images..."
-                }
-                post {
-                    always {
-                          echo 'STAGE SUCCESS : Debu Docker Build'
-                    }
+                    echo 'STAGE SUCCESS : Debug Docker Build'
                 }
             }
         }
@@ -42,13 +40,9 @@ stages {
                   docker rm -f jenkins_devops_exam_test-cast_service-1
                   docker rm -f jenkins_devops_exam_test-nginx-1
                   docker compose up -d
+                  echo 'STAGE SUCCESS : Docker Compose'
                   sleep 6
                 '''
-                }
-                post {
-                    always {
-                          echo 'STAGE SUCCESS : Docker Compose'
-                    }
                 }
             }
         }
@@ -61,13 +55,9 @@ stages {
                   docker images
                   docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/jenkins_devops_exam_test-cast_service:$DOCKER_TAG
                   docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/jenkins_devops_exam_test-movie_service:$DOCKER_TAG
+                  echo 'STAGE SUCCESS : Docker Tag'
                   sleep 4
                 '''
-                }
-                post {
-                    success {
-                          echo 'STAGE SUCCESS : Docker Tag'
-                    }
                 }
             }
         }
@@ -77,12 +67,8 @@ stages {
                     script {
                     sh '''
                     curl localhost
+                    echo "STAGE SUCCESS : Test d'acceptation réussi"
                     '''
-                    }
-                    post {
-                        success {
-                              echo "STAGE SUCCESS : Test d'acceptation réussi"
-                        }
                     }
             }
 
@@ -99,14 +85,10 @@ stages {
                 script {
                 sh '''
                   docker login -u $DOCKER_ID -p $DOCKER_PASS
-                  docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
-                  docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
+                  docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG	./jenkins_devops_exman_test
+                  docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG ./$DOCKER_REPOSITORY
+                  echo 'STAGE SUCCESS : Docker Push - Images des applications disponibles sur DockerHub'
                 '''
-                }
-                post {
-                    success {
-                          echo 'STAGE SUCCESS : Docker Push - Images des applications disponibles sur DockerHub.'
-                    }
                 }
             }
 
@@ -118,6 +100,7 @@ stage('Deploiement en dev'){
         KUBECONFIG = credentials("config_Jenkins_exam_test") // we retrieve kubeconfig from secret file called config saved on jenkins
         }
             steps {
+
                 script {
                 sh '''
                 rm -Rf .kube
@@ -128,12 +111,8 @@ stage('Deploiement en dev'){
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                 $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace dev
+                echo "STAGE SUCCESS : Deploiement sur l'environnement de développement effectué !"
                 '''
-                }
-                post {
-                    success {
-                          echo "STAGE SUCCESS : Deploiement sur l'environnement de développement effectué"
-                    }
                 }
             }
 
@@ -145,6 +124,7 @@ stage('Deploiement en QA'){
         KUBECONFIG = credentials("config_Jenkins_exam_test") // we retrieve kubeconfig from secret file called config saved on jenkins
         }
             steps {
+
                 script {
                 sh '''
                 rm -Rf .kube
@@ -155,12 +135,8 @@ stage('Deploiement en QA'){
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                 $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace qa
+                echo "STAGE SUCCESS : Deploiement sur l'environnement de test effectué !"
                 '''
-                }
-                post {
-                    success {
-                          echo "STAGE SUCCESS : Deploiement sur l'environnement de test effectué"
-                    }
                 }
             }
 
@@ -172,6 +148,7 @@ stage('Deploiement en staging'){
         KUBECONFIG = credentials("config_Jenkins_exam_test") // we retrieve  kubeconfig from secret file called config saved on jenkins
         }
             steps {
+
                 script {
                 sh '''
                 rm -Rf .kube
@@ -182,13 +159,8 @@ stage('Deploiement en staging'){
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                 $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace staging
-                '''	 
-                }
-                post {
-                    success {
-                          echo "STAGE SUCCESS : Deploiement sur l'environnement de pré-poduction réussi"
-                    }
-                }
+                echo "STAGE SUCCESS : Deploiement sur l'environnement de pré-poduction réussi !"
+                '''
             }
 
         }
@@ -203,14 +175,10 @@ stage('Deploiement en staging'){
                     timeout(time: 15, unit: "MINUTES") {
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
-                    post {
-                        success {
-                              echo "USER APPROBATION SUCCESS : ${Username} give his/her authorization to deploy on prod environment"
-                        }
-                    }
 
                 script {
                 sh '''
+                echo "USER APPROBATION SUCCESS : ${Username} give his/her authorization to deploy on prod environment"
                 rm -Rf .kube
                 mkdir .kube
                 ls
@@ -219,13 +187,9 @@ stage('Deploiement en staging'){
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                 $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace prod
+                echo "STAGE SUCCESS : Deploiement sur l'environnement de production réussi !"
+                echo "END : Pipeline realized and triggered by ${params.user}. Thank you for your courses, tips and advices! So Grateful !!"
                 '''
-                }
-                post {
-                    success {
-                          echo "STAGE SUCCESS : Deploiement sur l'environnement de production réussi"
-                          echo "Pipeline realized and triggered by ${params.user}. Thank you for your courses, tips and advices! So Grateful !!"
-                    }
                 }
             }
 
