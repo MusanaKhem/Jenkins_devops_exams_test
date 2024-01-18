@@ -27,7 +27,7 @@ stages {
             steps {
                 script {
                 sh '''
-                  docker rm -rf jenkins_devops_exam_test-nginx-1
+                  docker -rf jenkins_devops_exam_test-nginx-1
                   docker compose up -d
                   sleep 6
                 '''
