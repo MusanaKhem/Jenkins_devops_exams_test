@@ -38,7 +38,7 @@ stages {
                   docker rm -f jenkins_devops_exam_test-movie_service-1
                   docker rmi postgres:12.1-alpine
                   docker rmi jenkins_devops_exam_test-cast_service
-                  dcoker rmi jenkins_devops_exam_test-movie_service
+                  docker rmi jenkins_devops_exam_test-movie_service
                   docker compose up -d
                   sleep 6
                 '''
