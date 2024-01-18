@@ -46,8 +46,8 @@ stages {
                 sh '''
                   docker ps
                   docker images
-                  docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/jenkins_devops_exam_test-cast_service
-                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/jenkins_devops_exam_test-movie_service
+                  docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/jenkins_devops_exam_test-cast_service:$DOCKER_TAG
+                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/jenkins_devops_exam_test-movie_service:$DOCKER_TAG
                   sleep 4
                 '''
                 }
