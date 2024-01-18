@@ -24,7 +24,7 @@ stages {
             }
         }
 
-        stage(' Docker Build and run'){ // docker build image stage
+        stage('Docker Build and run'){ // docker build image stage
             steps {
                 script {
                 sh '''
@@ -35,6 +35,20 @@ stages {
                   docker rm -f jenkins_devops_exam_test-nginx-1
                   docker compose up -d
                   sleep 6
+                '''
+                }
+            }
+        }
+
+        stage('Docker Tag Images'){ // docker tag image to be able to push them to DockerHub
+            steps {
+                script {
+                sh '''
+                  docker ps
+                  docker images
+                  docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/jenkins_devops_exam_test-cast_service
+                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/jenkins_devops_exam_test-movie_service
+                  sleep 4
                 '''
                 }
             }
@@ -62,8 +76,8 @@ stages {
                 script {
                 sh '''
                 docker login -u $DOCKER_ID -p $DOCKER_PASS
-                docker push $DOCKER_CAST_IMAGE:$DOCKER_TAG
-                docker push $DOCKER_MOVIES_IMAGE:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
                 '''
                 }
             }
