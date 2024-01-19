@@ -1,9 +1,8 @@
 pipeline {
 environment { // Declaration of environment variables
 DOCKER_ID = "hmatondo"  //DockerHub useraccount
-DOCKER_REPOSITORY= "jenkins_devops_exam_test"
-DOCKER_CAST_IMAGE = "$DOCKER_REPOSITORY/cast_service"
-DOCKER_MOVIES_IMAGE = "$DOCKER_REPOSITORY/movie_service"
+DOCKER_CAST_IMAGE = "jenkins_devops_exam_test-cast_service"
+DOCKER_MOVIES_IMAGE = "jenkins_devops_exam_test-movie_service"
 DOCKER_CAST_DB_IMAGE = "postgres:12.1-alpine"
 DOCKER_MOVIE_DB_IMAGE = "postgres:12.1-alpine"
 DOCKER_TAG = "v.${BUILD_ID}.0" // Tag our image with the current build in order to increment the value by 1 with each new build
@@ -53,8 +52,8 @@ stages {
                 sh '''
                   docker ps
                   docker images
-                  docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/$DOCKER_REPOSITORY/cast_service:$DOCKER_TAG
-                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/$DOCKER_REPOSITORY/movie_service:$DOCKER_TAG
+                  docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/jenkins_devops_exam_test-cast_service:$DOCKER_TAG
+                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/jenkins_devops_exam_test-movie_servicee:$DOCKER_TAG
                   echo 'STAGE SUCCESS : Docker Tag'
                   sleep 4
                 '''
