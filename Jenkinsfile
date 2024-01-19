@@ -53,8 +53,8 @@ stages {
                 sh '''
                   docker ps
                   docker images
-                  docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/jenkins_devops_exam_test-cast_service:$DOCKER_TAG
-                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/jenkins_devops_exam_test-movie_service:$DOCKER_TAG
+                  docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/$DOCKER_REPOSITORY/cast_service:$DOCKER_TAG
+                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/$DOCKER_REPOSITORY/movie_service:$DOCKER_TAG
                   echo 'STAGE SUCCESS : Docker Tag'
                   sleep 4
                 '''
@@ -85,8 +85,8 @@ stages {
                 script {
                 sh '''
                   docker login -u $DOCKER_ID -p $DOCKER_PASS
-                  docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG	./jenkins_devops_exman_test
-                  docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG ./$DOCKER_REPOSITORY
+                  docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
+                  docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
                   echo 'STAGE SUCCESS : Docker Push - Images des applications disponibles sur DockerHub'
                 '''
                 }
