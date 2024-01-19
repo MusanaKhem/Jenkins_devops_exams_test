@@ -112,7 +112,7 @@ stage('Deploiement en dev'){
                   cat values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                   $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace dev
-                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yml --namespace dev
+                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yaml --namespace dev
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de développement effectué !"
                 '''
                 }
@@ -137,7 +137,7 @@ stage('Deploiement en QA'){
                   cat values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                   $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace qa
-                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yml --namespace qa
+                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yaml --namespace qa
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de test effectué !"
                 '''
                 }
@@ -162,7 +162,7 @@ stage('Deploiement en staging'){
                   cat values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                   $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace staging
-                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yml --namespace staging
+                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yaml --namespace staging
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de pré-poduction réussi !"
                 '''
                 }
@@ -192,7 +192,7 @@ stage('Deploiement en staging'){
                   cat values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                   $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace prod
-                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yml --namespace prod
+                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yaml --namespace prod
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de production réussi !"
                   echo "END : Pipeline realized and triggered by ${params.user}. Thank you for your courses, tips and advices! So Grateful !!"
                 '''
