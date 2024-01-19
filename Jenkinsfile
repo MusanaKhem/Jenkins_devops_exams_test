@@ -53,7 +53,7 @@ stages {
                   docker ps
                   docker images
                   docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/jenkins_devops_exam_test-cast_service:$DOCKER_TAG
-                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/jenkins_devops_exam_test-movie_servicee:$DOCKER_TAG
+                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/jenkins_devops_exam_test-movie_service:$DOCKER_TAG
                   echo 'STAGE SUCCESS : Docker Tag'
                   sleep 4
                 '''
