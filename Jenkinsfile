@@ -66,8 +66,8 @@ stages {
             steps {
                     script {
                     sh '''
-                    curl localhost
-                    echo "STAGE SUCCESS : Test d'acceptation réussi"
+                      curl localhost
+                      echo "STAGE SUCCESS : Test d'acceptation réussi"
                     '''
                     }
             }
@@ -103,15 +103,15 @@ stage('Deploiement en dev'){
 
                 script {
                 sh '''
-                rm -Rf .kube
-                mkdir .kube
-                ls
-                cat $KUBECONFIG > .kube/config
-                cp fastapi/values.yaml values.yml
-                cat values.yml
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace dev
-                echo "STAGE SUCCESS : Deploiement sur l'environnement de développement effectué !"
+                  rm -Rf .kube
+                  mkdir .kube
+                  ls
+                  cat $KUBECONFIG > .kube/config
+                  cp fastapi/values.yaml values.yml
+                  cat values.yml
+                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                  $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace dev
+                  echo "STAGE SUCCESS : Deploiement sur l'environnement de développement effectué !"
                 '''
                 }
             }
@@ -127,15 +127,15 @@ stage('Deploiement en QA'){
 
                 script {
                 sh '''
-                rm -Rf .kube
-                mkdir .kube
-                ls
-                cat $KUBECONFIG > .kube/config
-                cp fastapi/values.yaml values.yml
-                cat values.yml
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace qa
-                echo "STAGE SUCCESS : Deploiement sur l'environnement de test effectué !"
+                  rm -Rf .kube
+                  mkdir .kube
+                  ls
+                  cat $KUBECONFIG > .kube/config
+                  cp fastapi/values.yaml values.yml
+                  cat values.yml
+                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                  $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace qa
+                  echo "STAGE SUCCESS : Deploiement sur l'environnement de test effectué !"
                 '''
                 }
             }
@@ -151,16 +151,17 @@ stage('Deploiement en staging'){
 
                 script {
                 sh '''
-                rm -Rf .kube
-                mkdir .kube
-                ls
-                cat $KUBECONFIG > .kube/config
-                cp fastapi/values.yaml values.yml
-                cat values.yml
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace staging
-                echo "STAGE SUCCESS : Deploiement sur l'environnement de pré-poduction réussi !"
+                  rm -Rf .kube
+                  mkdir .kube
+                  ls
+                  cat $KUBECONFIG > .kube/config
+                  cp fastapi/values.yaml values.yml
+                  cat values.yml
+                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                  $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace staging
+                  echo "STAGE SUCCESS : Deploiement sur l'environnement de pré-poduction réussi !"
                 '''
+                }
             }
 
         }
@@ -178,17 +179,17 @@ stage('Deploiement en staging'){
 
                 script {
                 sh '''
-                echo "USER APPROBATION SUCCESS : ${Username} give his/her authorization to deploy on prod environment"
-                rm -Rf .kube
-                mkdir .kube
-                ls
-                cat $KUBECONFIG > .kube/config
-                cp fastapi/values.yaml values.yml
-                cat values.yml
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace prod
-                echo "STAGE SUCCESS : Deploiement sur l'environnement de production réussi !"
-                echo "END : Pipeline realized and triggered by ${params.user}. Thank you for your courses, tips and advices! So Grateful !!"
+                  echo "USER APPROBATION SUCCESS : ${Username} give his/her authorization to deploy on prod environment"
+                  rm -Rf .kube
+                  mkdir .kube
+                  ls
+                  cat $KUBECONFIG > .kube/config
+                  cp fastapi/values.yaml values.yml
+                  cat values.yml
+                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                  $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace prod
+                  echo "STAGE SUCCESS : Deploiement sur l'environnement de production réussi !"
+                  echo "END : Pipeline realized and triggered by ${params.user}. Thank you for your courses, tips and advices! So Grateful !!"
                 '''
                 }
             }
