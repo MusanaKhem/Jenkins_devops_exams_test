@@ -6,8 +6,15 @@
 │   │   │   ├── casts.py
 │   │   │   ├── db_manager.py
 │   │   │   ├── db.py
-│   │   │   └── models.py
-│   │   └── main.py
+│   │   │   ├── models.py
+│   │   │   └── __pycache__
+│   │   │       ├── casts.cpython-38.pyc
+│   │   │       ├── db.cpython-38.pyc
+│   │   │       ├── db_manager.cpython-38.pyc
+│   │   │       └── models.cpython-38.pyc
+│   │   ├── main.py
+│   │   └── __pycache__
+│   │       └── main.cpython-38.pyc
 │   ├── Dockerfile
 │   └── requirements.txt
 ├── config
@@ -51,11 +58,19 @@
 │   │   │   ├── db.py
 │   │   │   ├── models.py
 │   │   │   ├── movies.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── db.cpython-38.pyc
+│   │   │   │   ├── db_manager.cpython-38.pyc
+│   │   │   │   ├── models.cpython-38.pyc
+│   │   │   │   ├── movies.cpython-38.pyc
+│   │   │   │   └── service.cpython-38.pyc
 │   │   │   └── service.py
-│   │   └── main.py
+│   │   ├── main.py
+│   │   └── __pycache__
+│   │       └── main.cpython-38.pyc
 │   ├── Dockerfile
 │   └── requirements.txt
 ├── nginx_config.conf
 └── README.md
 
-12 directories, 47 files
+16 directories, 58 files
