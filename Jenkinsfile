@@ -7,6 +7,8 @@ DOCKER_CAST_DB_IMAGE = "postgres:12.1-alpine"
 DOCKER_MOVIE_DB_IMAGE = "postgres:12.1-alpine"
 DOCKER_TAG = "v.${BUILD_ID}.0" // Tag our image with the current build in order to increment the value by 1 with each new build
 HELM_PATH = "/usr/local/bin/helm" // In my case it is important to specify helm path ; if none Jenkins will not find tool
+DOCKER_CAST_REPOSITORY = jenkins_devops_exam_test-cast_service
+DOCKER_MOVIE_REPOSITORY = jenkins_devops_exam_test-movie_service
 }
 agent any // Jenkins will be able to select all available agents
 parameters {
@@ -109,7 +111,8 @@ stage('Deploiement en dev'){
                   cp fastapi/values.yaml values.yml
                   cat values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                  $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace dev
+                  $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace dev
+                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yml --namespace dev
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de développement effectué !"
                 '''
                 }
@@ -133,7 +136,8 @@ stage('Deploiement en QA'){
                   cp fastapi/values.yaml values.yml
                   cat values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                  $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace qa
+                  $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace qa
+                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yml --namespace qa
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de test effectué !"
                 '''
                 }
@@ -157,7 +161,8 @@ stage('Deploiement en staging'){
                   cp fastapi/values.yaml values.yml
                   cat values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                  $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace staging
+                  $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace staging
+                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yml --namespace staging
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de pré-poduction réussi !"
                 '''
                 }
@@ -186,7 +191,8 @@ stage('Deploiement en staging'){
                   cp fastapi/values.yaml values.yml
                   cat values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                  $HELM_PATH upgrade --install cast-service movie-service fastapi --values=values.yml --namespace prod
+                  $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace prod
+                  $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yml --namespace prod
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de production réussi !"
                   echo "END : Pipeline realized and triggered by ${params.user}. Thank you for your courses, tips and advices! So Grateful !!"
                 '''
