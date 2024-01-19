@@ -7,8 +7,6 @@ DOCKER_CAST_DB_IMAGE = "postgres:12.1-alpine"
 DOCKER_MOVIE_DB_IMAGE = "postgres:12.1-alpine"
 DOCKER_TAG = "v.${BUILD_ID}.0" // Tag our image with the current build in order to increment the value by 1 with each new build
 HELM_PATH = "/usr/local/bin/helm" // In my case it is important to specify helm path ; if none Jenkins will not find tool
-DOCKER_CAST_REPOSITORY = "jenkins_devops_exam_test-cast_service"
-DOCKER_MOVIE_REPOSITORY = "jenkins_devops_exam_test-movie_service"
 }
 agent any // Jenkins will be able to select all available agents
 parameters {
@@ -109,8 +107,11 @@ stage('Deploiement en dev'){
                   ls
                   cat $KUBECONFIG > .kube/config
                   cp fastapi/values.yaml values.yml
+                  cp movieapi/values.yaml movie-values.yml
                   cat values.yml
+                  cat movie-values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" movie-values.yml
                   $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace dev
                   $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yaml --namespace dev
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de développement effectué !"
@@ -134,8 +135,11 @@ stage('Deploiement en QA'){
                   ls
                   cat $KUBECONFIG > .kube/config
                   cp fastapi/values.yaml values.yml
+                  cp movieapi/values.yaml movie-values.yml
                   cat values.yml
+                  cat movie-values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" movie-values.yml
                   $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace qa
                   $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yaml --namespace qa
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de test effectué !"
@@ -159,8 +163,11 @@ stage('Deploiement en staging'){
                   ls
                   cat $KUBECONFIG > .kube/config
                   cp fastapi/values.yaml values.yml
+                  cp movieapi/values.yaml movie-values.yml
                   cat values.yml
+                  cat movie-values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" movie-values.yml
                   $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace staging
                   $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yaml --namespace staging
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de pré-poduction réussi !"
@@ -189,8 +196,11 @@ stage('Deploiement en staging'){
                   ls
                   cat $KUBECONFIG > .kube/config
                   cp fastapi/values.yaml values.yml
+                  cp movieapi/values.yaml movie-values.yml
                   cat values.yml
+                  cat movie-values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" movie-values.yml
                   $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace prod
                   $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yaml --namespace prod
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de production réussi !"
