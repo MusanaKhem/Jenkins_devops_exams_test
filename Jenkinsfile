@@ -107,7 +107,7 @@ stage('Deploiement en dev'){
                   ls
                   cat $KUBECONFIG > .kube/config
                   cp fastapi/values.yaml values.yml
-                  cp movieapi/values.yaml movie-values.yml
+                  cp movieapi/movie-values.yaml movie-values.yml
                   cat values.yml
                   cat movie-values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
@@ -135,7 +135,7 @@ stage('Deploiement en QA'){
                   ls
                   cat $KUBECONFIG > .kube/config
                   cp fastapi/values.yaml values.yml
-                  cp movieapi/values.yaml movie-values.yml
+                  cp movieapi/movie-values.yaml movie-values.yml
                   cat values.yml
                   cat movie-values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
@@ -163,7 +163,7 @@ stage('Deploiement en staging'){
                   ls
                   cat $KUBECONFIG > .kube/config
                   cp fastapi/values.yaml values.yml
-                  cp movieapi/values.yaml movie-values.yml
+                  cp movieapi/movie-values.yaml movie-values.yml
                   cat values.yml
                   cat movie-values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
@@ -196,7 +196,7 @@ stage('Deploiement en staging'){
                   ls
                   cat $KUBECONFIG > .kube/config
                   cp fastapi/values.yaml values.yml
-                  cp movieapi/values.yaml movie-values.yml
+                  cp movieapi/movie-values.yaml movie-values.yml
                   cat values.yml
                   cat movie-values.yml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
