@@ -1,18 +1,19 @@
 pipeline {
-environment { // Declaration of environment variables
-DOCKER_ID = "hmatondo"  //DockerHub useraccount
-DOCKER_CAST_IMAGE = "jenkins_devops_exam_test-cast_service"
-DOCKER_MOVIES_IMAGE = "jenkins_devops_exam_test-movie_service"
-DOCKER_CAST_DB_IMAGE = "postgres:12.1-alpine"
-DOCKER_MOVIE_DB_IMAGE = "postgres:12.1-alpine"
-DOCKER_TAG = "v.${BUILD_ID}.0" // Tag our image with the current build in order to increment the value by 1 with each new build
-HELM_PATH = "/usr/local/bin/helm" // In my case it is important to specify helm path ; if none Jenkins will not find tool
-}
-agent any // Jenkins will be able to select all available agents
-parameters {
-    string(name: 'user', defaultValue: 'hmatondo', description: 'Pipeline realized using few tools such as Git, GitHub, Jenkins, Docker, Kubernetes, k3s.')
-}
-stages {
+    environment { // Declaration of environment variables
+        DOCKER_ID = "hmatondo"  //DockerHub useraccount
+        DOCKER_CAST_IMAGE = "jenkins_devops_exam_test-cast_service"
+        DOCKER_MOVIES_IMAGE = "jenkins_devops_exam_test-movie_service"
+        DOCKER_CAST_DB_IMAGE = "postgres:12.1-alpine"
+        DOCKER_MOVIE_DB_IMAGE = "postgres:12.1-alpine"
+        DOCKER_TAG = "v.${BUILD_ID}.0" // Tag our image with the current build in order to increment the value by 1 with each new build
+        HELM_PATH = "/usr/local/bin/helm" // In my case it is important to specify helm path ; if none Jenkins will not find tool
+    }
+    agent any // Jenkins will be able to select all available agents
+    parameters {
+        string(name: 'user', defaultValue: 'hmatondo', description: 'Pipeline realized using few tools such as Git, GitHub, Jenkins, Docker, Kubernetes, k3s.')
+    }
+
+    stages {
         stage('Debug Docker Build'){
             steps {
                 script {
