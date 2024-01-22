@@ -35,6 +35,7 @@
 │   └── values.yaml
 ├── get_helm.sh
 ├── Jenkinsfile
+├── Jenkinsfile-describe.txt
 ├── Kube_Manifests
 │   ├── cast-db-deployment.yaml
 │   ├── cast-service-claim0-persistentvolumeclaim.yaml
@@ -51,6 +52,20 @@
 │   └── postgres-data-movie-persistentvolumeclaim.yaml
 ├── lien_dockehub.txt
 ├── lien_repo.txt
+├── movieapi
+│   ├── charts
+│   ├── Chart.yaml
+│   ├── movie-values.yaml
+│   └── templates
+│       ├── deployment.yaml
+│       ├── _helpers.tpl
+│       ├── hpa.yaml
+│       ├── ingress.yaml
+│       ├── NOTES.txt
+│       ├── serviceaccount.yaml
+│       ├── service.yaml
+│       └── tests
+│           └── test-connection.yaml
 ├── movie-service
 │   ├── app
 │   │   ├── api
@@ -73,4 +88,4 @@
 ├── nginx_config.conf
 └── README.md
 
-16 directories, 58 files
+20 directories, 69 files

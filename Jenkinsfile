@@ -190,7 +190,7 @@ stage('Deploiement en staging'){
 
                 script {
                 sh '''
-                  echo "USER APPROBATION SUCCESS : ${DOCKER_ID} give his/her authorization to deploy on prod environment"
+                  echo "USER APPROBATION SUCCESS : $DOCKER_ID give his/her authorization to deploy on prod environment"
                   rm -Rf .kube
                   mkdir .kube
                   ls
