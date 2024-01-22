@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: hmatondo/jenkins_devops_exam_test
+  repository: hmatondo/jenkins_devops_exam_test-movie_service
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
