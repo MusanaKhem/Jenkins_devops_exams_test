@@ -1,16 +1,16 @@
 pipeline {
     environment { // Declaration of environment variables
         DOCKER_ID = "hmatondo"  //DockerHub useraccount
-        DOCKER_CAST_IMAGE = "jenkins_devops_exam_test-cast_service"
-        DOCKER_MOVIES_IMAGE = "jenkins_devops_exam_test-movie_service"
-        DOCKER_CAST_DB_IMAGE = "postgres:12.1-alpine"
-        DOCKER_MOVIE_DB_IMAGE = "postgres:12.1-alpine"
-        DOCKER_TAG = "v.${BUILD_ID}.0" // Tag our image with the current build in order to increment the value by 1 with each new build
+        DOCKER_CAST_IMAGE = "jenkins_devops_exam_test-cast_service"    // Cast service image
+        DOCKER_MOVIES_IMAGE = "jenkins_devops_exam_test-movie_service"    // Movie service image
+        DOCKER_CAST_DB_IMAGE = "postgres:12.1-alpine"    // Cast database image
+        DOCKER_MOVIE_DB_IMAGE = "postgres:12.1-alpine"    // Movie database image
+        DOCKER_TAG = "v.${BUILD_ID}.0" // Tag our api(s) images with the current build in order to increment the value by 1 with each new build
         HELM_PATH = "/usr/local/bin/helm" // In my case it is important to specify helm path ; if none Jenkins will not find tool
     }
     agent any // Jenkins will be able to select all available agents
     parameters {
-        string(name: 'user', defaultValue: 'hmatondo', description: 'Pipeline realized using few tools such as Git, GitHub, Jenkins, Docker, Kubernetes, k3s.')
+        string(name: 'user', defaultValue: 'Please past your name', description: 'Pipeline CI/CD is realized using few tools such as Git, GitHub, Jenkins, Docker, Kubernetes, k3s.')    //  Using paramters too start pipeline
     }
 
     stages {
@@ -24,7 +24,6 @@ pipeline {
                     echo "DOCKER_MOVIES_IMAGE: $DOCKER_MOVIES_IMAGE"
                     echo "DOCKER_CAST_DB_IMAGE: $DOCKER_CAST_DB_IMAGE"
                     echo "DOCKER_MOVIE_DB_IMAGE: $DOCKER_MOVIE_DB_IMAGE"
-                    echo "Building and pushing images..."
                     echo 'STAGE SUCCESS : Debug Docker Build'
                 }
             }
@@ -34,12 +33,12 @@ pipeline {
             steps {
                 script {
                 sh '''
-                  docker rm -f jenkins_devops_exam_test-cast_db-1
-                  docker rm -f jenkins_devops_exam_test-movie_db-1
-                  docker rm -f jenkins_devops_exam_test-movie_service-1
-                  docker rm -f jenkins_devops_exam_test-cast_service-1
-                  docker rm -f jenkins_devops_exam_test-nginx-1
-                  docker compose up -d
+                  docker rm -f jenkins_devops_exam_test-cast_db-1    // Remove cast database
+                  docker rm -f jenkins_devops_exam_test-movie_db-1    // Remove movie database
+                  docker rm -f jenkins_devops_exam_test-movie_service-1    // Remove movie service
+                  docker rm -f jenkins_devops_exam_test-cast_service-1    // Remove cast service
+                  docker rm -f jenkins_devops_exam_test-nginx-1    // Remove nginx server service
+                  docker compose up -d    // Launch docker compose script to build api
                   echo 'STAGE SUCCESS : Docker Compose'
                   sleep 6
                 '''
@@ -51,10 +50,10 @@ pipeline {
             steps {
                 script {
                 sh '''
-                  docker ps
-                  docker images
-                  docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/jenkins_devops_exam_test-cast_service:$DOCKER_TAG
-                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/jenkins_devops_exam_test-movie_service:$DOCKER_TAG
+                  docker ps    // Check running containers
+                  docker images    // Check images already downloaded
+                  docker tag jenkins_devops_exam_test-cast_service $DOCKER_ID/jenkins_devops_exam_test-cast_service:$DOCKER_TAG    // Tag cast service image
+                  docker tag jenkins_devops_exam_test-movie_service $DOCKER_ID/jenkins_devops_exam_test-movie_service:$DOCKER_TAG    // Tag movie service image
                   echo 'STAGE SUCCESS : Docker Tag'
                   sleep 4
                 '''
@@ -66,7 +65,7 @@ pipeline {
             steps {
                     script {
                     sh '''
-                      curl localhost
+                      curl localhost    // HTTP Request/Response Test to local working environment ; web app test without needing a server ; You can already replace localhost with your server IP address http://IP_ADDRESS 
                       echo "STAGE SUCCESS : Test d'acceptation réussi"
                     '''
                     }
@@ -84,9 +83,9 @@ pipeline {
 
                 script {
                 sh '''
-                  docker login -u $DOCKER_ID -p $DOCKER_PASS
-                  docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
-                  docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG
+                  docker login -u $DOCKER_ID -p $DOCKER_PASS    // Log to DockerHub account
+                  docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG    // Push cast service image
+                  docker push $DOCKER_ID/$DOCKER_MOVIES_IMAGE:$DOCKER_TAG    // Push movie service image
                   echo 'STAGE SUCCESS : Docker Push - Images des applications disponibles sur DockerHub'
                 '''
                 }
@@ -103,17 +102,17 @@ stage('Deploiement en dev'){
 
                 script {
                 sh '''
-                  rm -Rf .kube
-                  mkdir .kube
-                  ls
-                  cat $KUBECONFIG > .kube/config
-                  cp fastapi/values.yaml values.yml
-                  cp movieapi/movie-values.yaml movie-values.yaml
-                  cat values.yml
-                  cat movie-values.yaml
-                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" movie-values.yaml
-                  $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace dev
+                  rm -Rf .kube    // Remove existing kube folder to avoid conflicts
+                  mkdir .kube    // Create a new kube folder
+                  ls -alt    // Check if kube folder was correctly created   
+                  cat $KUBECONFIG > .kube/config    // Write kube config in a kube folder config file
+                  cp fastapi/values.yaml values.yml    // Copy cast fastapi configuration
+                  cp movieapi/movie-values.yaml movie-values.yaml    // Copy movie fastapi configuration
+                  cat values.yml    // See cast fastapi config
+                  cat movie-values.yaml    // See movie fastapi config
+                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml    // Change tag value in cast fastapi yaml config file
+                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" movie-values.yaml    // Change tag value in movie fastapi yaml config file
+                  $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace dev    
                   $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yaml --namespace dev
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de développement effectué !"
                 '''
@@ -131,12 +130,12 @@ stage('Deploiement en QA'){
 
                 script {
                 sh '''
-                  rm -Rf .kube
-                  mkdir .kube
-                  ls
-                  cat $KUBECONFIG > .kube/config
-                  cp fastapi/values.yaml values.yml
-                  cp movieapi/movie-values.yaml movie-values.yaml
+                  rm -Rf .kube    // Remove existing kube folder to avoid conflicts
+                  mkdir .kube    // Create a new kube folder
+                  ls -alt    // Check if kube folder was correctly created
+                  cat $KUBECONFIG > .kube/config    // Write kube config in a kube folder config file
+                  cp fastapi/values.yaml values.yml    // Copy cast fastapi configuration
+                  cp movieapi/movie-values.yaml movie-values.yaml    // Copy movie fastapi configuration
                   cat values.yml
                   cat movie-values.yaml
                   sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
