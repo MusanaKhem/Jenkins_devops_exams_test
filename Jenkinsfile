@@ -9,9 +9,6 @@ pipeline {
         HELM_PATH = "/usr/local/bin/helm" // In my case it is important to specify helm path ; if none Jenkins will not find tool
     }
     agent any // Jenkins will be able to select all available agents
-    parameters {
-        string(name: 'user', defaultValue: 'Please past your name', description: 'Pipeline CI/CD is realized using few tools such as Git, GitHub, Jenkins, Docker, Kubernetes, k3s.')    //  Using paramters too start pipeline
-    }
 
     stages {
         stage('Debug Docker Build'){
@@ -204,7 +201,7 @@ stage('Deploiement en staging'){
                   $HELM_PATH upgrade --install cast-service ./fastapi --values=values.yml --namespace prod
                   $HELM_PATH upgrade --install movie-service ./movieapi --values=movie-values.yaml --namespace prod
                   echo "STAGE SUCCESS : Deploiement sur l'environnement de production réussi !"
-                  echo "END : Pipeline realized and triggered by ${params.user}. Thank you for your courses, tips and advices! So Grateful !!"
+                  echo "END : Pipeline realized and triggered by $DOCKER_ID. Thank you for your courses, tips and advices! So Grateful !!"
                 '''
                 }
             }
