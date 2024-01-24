@@ -1,16 +1,15 @@
 version: '3.7'
-
 services:
   movie_service:
     build: ./movie-service
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8001
     volumes:
       - ./movie-service/:/app/
     ports:
-      - 8001:8000
+      - 8001:8001
     environment:
       - DATABASE_URI=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev
-      - CAST_SERVICE_HOST_URL=http://cast_service:8000/api/v1/casts/
+      - CAST_SERVICE_HOST_URL=http://cast_service:8002/api/v1/casts/
     depends_on:
       - movie_db
 
@@ -25,11 +24,11 @@ services:
 
   cast_service:
     build: ./cast-service
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8003
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8002
     volumes:
       - ./cast-service/:/app/
     ports:
-      - 8002:8003
+      - 8002:8002
     environment:
       - DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev
     depends_on:
